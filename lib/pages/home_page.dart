@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forus/model/card_data.dart';
 import 'package:forus/widget/bottom_nav.dart';
+import 'package:forus/widget/custom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -98,21 +99,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('Joined Group',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            )),
-        backgroundColor: Colors.blueAccent,
-      ),
+      appBar: const CustomAppBar(),
       body: Container(
         color: Colors.greenAccent,
         child: SingleChildScrollView(
-            child: Column(
-                children: datas.map((data) => cardTemplate(data)).toList())),
+          child: Column(
+            children: datas.map((datas) => cardTemplate(datas)).toList(),
+          ),
+        ),
       ),
       bottomNavigationBar: const BottomNav(),
     );
