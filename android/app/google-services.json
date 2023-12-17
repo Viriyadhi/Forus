@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "60320944898",
+    "project_id": "forus-new",
+    "storage_bucket": "forus-new.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60320944898:android:24376b2107c947a749281b",
+        "android_client_info": {
+          "package_name": "com.example.forus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60320944898-3s1khl8dinnr2l6ihp5r25shhis4kfdc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.forus",
+            "certificate_hash": "cad19e572e4d0837e9e0d2ee67497b1fa321c1de"
+          }
+        },
+        {
+          "client_id": "60320944898-5lf6onp09ua2bhod63m1g3v4mov21toc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHdiz7IzFV9_W1tpEULiJW2qY-IyaohPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60320944898-5lf6onp09ua2bhod63m1g3v4mov21toc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
