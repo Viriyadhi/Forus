@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:forus/home_page.dart';
+import 'package:forus/pages/home_page.dart';
+import 'package:forus/pages/profile_page.dart';
 
 void main() => runApp(MaterialApp(initialRoute: '/home', routes: {
-      '/': (context) => const HomePage(),
-      // '/:name': (context) => const HomePage(),
-      // '/:name/:tag': (context) => const HomePage(),
+      // '/': (context) => const SplashScreen(),
+      '/home': (context) => const HomePage(),
+      '/profile': (context) => const ProfilePage(),
     }));
