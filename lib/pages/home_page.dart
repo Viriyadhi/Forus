@@ -100,13 +100,33 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
-      body: Container(
-        color: Colors.greenAccent,
-        child: SingleChildScrollView(
-          child: Column(
-            children: datas.map((datas) => cardTemplate(datas)).toList(),
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                suffixIcon: Icon(Icons.clear),
+                labelText: 'Outlined',
+                hintText: 'hint text',
+                border: OutlineInputBorder(
+                    // borderRadius: BorderRadius.circular(50.0)
+                    ),
+              ),
+            ),
           ),
-        ),
+          Expanded(
+            child: Container(
+              color: Colors.greenAccent,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: datas.map((data) => cardTemplate(data)).toList(),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: const BottomNav(),
     );
