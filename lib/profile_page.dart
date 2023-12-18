@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:forus/bottomNavWidget.dart';
 import 'package:forus/login_page.dart';
 
 class ProfilePage extends StatefulWidget {

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:forus/bottomNavWidget.dart';
 import 'package:forus/profile_page.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -32,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     User? currentUser = firebaseAuth.currentUser;
     if (currentUser != null) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const ProfilePage()),
+        MaterialPageRoute(builder: (context) => const bottomNavBarWidget()),
       );
     }
   }
