@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:forus/profile_page.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -15,13 +16,25 @@ class _LoginPageState extends State<LoginPage> {
 
   User? _user;
 
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     firebaseAuth.authStateChanges().listen((event) {
       _user = event;
+      checkCurrentUserAndNavigate();
     });
+  }
+
+  void checkCurrentUserAndNavigate() {
+    User? currentUser = firebaseAuth.currentUser;
+    if (currentUser != null) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
+      );
+    }
   }
 
   @override
@@ -30,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: const Text("Login!"),
       ),
-      body: _user != null ? _contunueLogin() : _googleSignInButton(),
+      body: _googleSignInButton(),
     );
   }
 
@@ -41,14 +54,20 @@ class _LoginPageState extends State<LoginPage> {
         child: SignInButton(
           Buttons.google,
           text: "Sign In",
-          onPressed: signInWithGoogle, // Updated onPressed handler
+          onPressed: (){
+            signInWithGoogle().then((userCredential) {
+              if (userCredential != null) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                );
+              }
+            }).catchError((error){
+              print("Sign In Error: $error");
+            });
+          }, // Updated onPressed handler
         ),
       ),
     );
-  }
-
-  Widget _contunueLogin(){
-    return const SizedBox();
   }
 
   Future<UserCredential> signInWithGoogle() async {
