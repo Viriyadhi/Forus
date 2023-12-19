@@ -12,7 +12,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: CustomAppBar(),
       body: Center(
         child: Text('Profile Page',
             style: TextStyle(

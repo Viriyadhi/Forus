@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:forus/model/card_data.dart';
-import 'package:forus/widget/bottom_nav.dart';
-import 'package:forus/widget/custom_app_bar.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class DiscoverPage extends StatefulWidget {
+  const DiscoverPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<DiscoverPage> createState() => _DiscoverPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _DiscoverPageState extends State<DiscoverPage> {
+
   List<CardData> datas = [
     CardData(
         title: 'FG/Programming',
@@ -54,7 +53,25 @@ class _HomePageState extends State<HomePage> {
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
   ];
 
-  Widget cardTemplate(datas) {
+  List<CardData> _filtered = [];
+
+  @override
+  void initState() {
+    _filtered = datas.toList();
+    super.initState();
+  }
+
+  void _runFiltered(String keyword){
+    setState(() {
+      if(keyword.isEmpty) {
+        _filtered = datas;
+      } if(keyword.isNotEmpty){
+        _filtered = datas.where((data) => data.title.toLowerCase().contains(keyword.toLowerCase())).toList();
+      }
+    });
+  }
+
+  Widget cardTemplate(data) {
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Padding(
@@ -66,24 +83,17 @@ class _HomePageState extends State<HomePage> {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(datas.imagePath),
+                  backgroundImage: NetworkImage(data.imagePath),
                   radius: 30,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      datas.title,
+                      data.title,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      datas.description,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
                       ),
                     ),
                   ],
@@ -99,20 +109,22 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: TextField(
-              decoration: InputDecoration(
+              onChanged: (value){
+                _runFiltered(value);
+              },
+              decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.search),
                 suffixIcon: Icon(Icons.clear),
-                labelText: 'Outlined',
-                hintText: 'hint text',
+                labelText: 'Search',
+                hintText: 'Keyword',
                 border: OutlineInputBorder(
-                    // borderRadius: BorderRadius.circular(50.0)
-                    ),
+                  // borderRadius: BorderRadius.circular(50.0)
+                ),
               ),
             ),
           ),
@@ -121,14 +133,13 @@ class _HomePageState extends State<HomePage> {
               color: Colors.greenAccent,
               child: SingleChildScrollView(
                 child: Column(
-                  children: datas.map((data) => cardTemplate(data)).toList(),
+                  children: _filtered.map((data) => cardTemplate(data)).toList(),
                 ),
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: const BottomNav(),
     );
   }
 }

@@ -1,4 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:forus/pages/discover_page.dart';
+
+final _router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/discover_page.dart',
+      builder: (context, state) => const DiscoverPage()
+    ),
+  ],
+);
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
