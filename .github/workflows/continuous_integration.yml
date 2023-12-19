@@ -2,7 +2,7 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [ "develop", "main" ]
+    branches: [ "develop", "main", "obnitram" ]
   pull_request:
     branches: [ "develop", "main" ]
 
