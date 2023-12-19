@@ -9,7 +9,6 @@ class DiscoverPage extends StatefulWidget {
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
-
   List<CardData> datas = [
     CardData(
         title: 'FG/Programming',
@@ -61,12 +60,16 @@ class _DiscoverPageState extends State<DiscoverPage> {
     super.initState();
   }
 
-  void _runFiltered(String keyword){
+  void _runFiltered(String keyword) {
     setState(() {
-      if(keyword.isEmpty) {
+      if (keyword.isEmpty) {
         _filtered = datas;
-      } if(keyword.isNotEmpty){
-        _filtered = datas.where((data) => data.title.toLowerCase().contains(keyword.toLowerCase())).toList();
+      }
+      if (keyword.isNotEmpty) {
+        _filtered = datas
+            .where((data) =>
+                data.title.toLowerCase().contains(keyword.toLowerCase()))
+            .toList();
       }
     });
   }
@@ -114,7 +117,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              onChanged: (value){
+              onChanged: (value) {
                 _runFiltered(value);
               },
               decoration: const InputDecoration(
@@ -123,8 +126,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 labelText: 'Search',
                 hintText: 'Keyword',
                 border: OutlineInputBorder(
-                  // borderRadius: BorderRadius.circular(50.0)
-                ),
+                    // borderRadius: BorderRadius.circular(50.0)
+                    ),
               ),
             ),
           ),
@@ -133,7 +136,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
               color: Colors.greenAccent,
               child: SingleChildScrollView(
                 child: Column(
-                  children: _filtered.map((data) => cardTemplate(data)).toList(),
+                  children:
+                      _filtered.map((data) => cardTemplate(data)).toList(),
                 ),
               ),
             ),
