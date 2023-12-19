@@ -1,15 +1,15 @@
+
 name: Continuous Integration
 
 on:
   push:
-    branches: [ "develop", "main", "obnitram" ]
+    branches: [ "main", "develop", "obnitram" ]
   pull_request:
-    branches: [ "develop", "main" ]
-
+    branches: [ "main", "develop" ]
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
@@ -23,14 +23,31 @@ jobs:
         run: flutter pub get
 
       - name: Verify formatting
-        run: dart format --output=show --set-exit-if-changed .
-        continue-on-error: true
+        id: formatting
+        run: |
+          dart format --output=show --set-exit-if-changed .
+          echo "formatting-outcome=$?" >> $GITHUB_ENV
 
       - name: Analyze project source
-        run: flutter analyze --fatal-info
-        continue-on-error: true
+        id: analyze
+        run: |
+          flutter analyze --fatal-infos
+          echo "analyze-outcome=$?" >> $GITHUB_ENV
 
       - name: Run tests
-        run: flutter test
-        continue-on-error: true
+        id: tests
+        run: |
+          flutter test
+          echo "test-outcome=$?" >> $GITHUB_ENV
+
+      - name: Generate Report
+        id: report
+        run: |
+          echo "Report:"
+          echo "Formatting Outcome: ${{ env.formatting-outcome }}"
+          echo "Analyze Outcome: ${{ env.analyze-outcome }}"
+          echo "Test Outcome: ${{ env.test-outcome }}"
+          if [ ${{ env.formatting-outcome }} != 0 ] || [ ${{ env.analyze-outcome }} != 0 ] || [ ${{ env.test-outcome }} != 0 ]; then
+            exit 1
+          fi
 
