@@ -2,9 +2,15 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [ "main", "develop", "obnitram" ]
+    branches:
+      - feature/**
+
   pull_request:
-    branches: [ "main", "develop" ]
+    branches:
+      - develop
+      - main
+
+    
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
