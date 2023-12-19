@@ -3,7 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:forus/pages/navigation_thing.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Must be able to trigger a first frame',
+      (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(
       const MaterialApp(
