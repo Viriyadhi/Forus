@@ -19,10 +19,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
         description: 'Find out more about the Navy',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Military',
-        description: 'Find out more about the Military',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
         title: 'FG/General',
         description: 'You can talk about anything here',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
