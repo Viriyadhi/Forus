@@ -29,6 +29,9 @@ class CustomBottomNavState extends State<CustomBottomNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('ForUs'),
+      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
