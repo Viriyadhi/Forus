@@ -1,6 +1,6 @@
-import 'package:forus/pages/profile_page.dart';
-import 'package:forus/pages/discover_page.dart';
 import 'package:flutter/material.dart';
+import 'package:forus/pages/discover_page.dart';
+import 'package:forus/pages/profile_page.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -10,10 +10,9 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
-
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'MyGroup',
@@ -32,6 +31,9 @@ class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('ForUs'),
+      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
