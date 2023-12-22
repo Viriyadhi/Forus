@@ -70,7 +70,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
     });
   }
 
-  Widget cardTemplate(data) {
+  Widget cardTemplateHorizontal(data) {
     return SizedBox(
       height: 200,
       width: 150,
@@ -99,55 +99,107 @@ class _DiscoverPageState extends State<DiscoverPage> {
     );
   }
 
+  Widget cardTemplateVertical(data) {
+    return SizedBox(
+      height: 80,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(13),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(40, 40, 45, 100),
+      backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
       body: Container(
         color: const Color.fromRGBO(40, 40, 45, 100),
-        child: Column(
-          children: [
-            const Text(
-              'Hello There!',
-              textAlign: TextAlign.left,
-              style: TextStyle(color: Colors.white),
-            ),
-            SizedBox(
-              height: 50,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  onChanged: (value) {
-                    _runFiltered(value);
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: const Icon(Icons.clear),
-                    labelText: 'Search',
-                    hintText: 'Keyword',
-                    focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black)),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(14.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  height: 70,
+                  child: TextField(
+                    onChanged: (value) {
+                      _runFiltered(value);
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: const Icon(Icons.clear),
+                      labelText: 'Search',
+                      hintText: 'Keyword',
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: const Color.fromRGBO(40, 40, 45, 100),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children:
-                        _filtered.map((data) => cardTemplate(data)).toList(),
+                const Text(
+                  'Hello Here are today\'s trending topics!',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
                   ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 22),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _filtered
+                          .map((data) => cardTemplateHorizontal(data))
+                          .toList(),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 40.0),
+                  child: Text(
+                    textAlign: TextAlign.left,
+                    'Find Out More',
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 22),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: _filtered
+                          .map((data) => cardTemplateVertical(data))
+                          .toList(),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
