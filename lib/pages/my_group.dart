@@ -81,8 +81,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 8),
             Row(
               children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(data.imagePath),
+                const CircleAvatar(
                   radius: 30,
                 ),
                 Column(
