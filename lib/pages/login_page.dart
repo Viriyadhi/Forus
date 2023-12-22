@@ -14,8 +14,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  User? _user;
-
 
   @override
   void initState() {
@@ -23,7 +21,6 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
 
     firebaseAuth.authStateChanges().listen((event) {
-      _user = event;
       checkCurrentUserAndNavigate();
     });
   }
@@ -54,13 +51,10 @@ class _LoginPageState extends State<LoginPage> {
           text: "Sign In",
           onPressed: (){
             signInWithGoogle().then((userCredential) {
-              if (userCredential != null) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const CustomBottomNav()),
-                );
-              }
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const CustomBottomNav()),
+              );
             }).catchError((error){
-              print("Sign In Error: $error");
             });
           }, // Updated onPressed handler
         ),

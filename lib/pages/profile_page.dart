@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:forus/widget/custom_app_bar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
