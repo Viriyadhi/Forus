@@ -44,11 +44,17 @@ class CustomBottomNavState extends State<CustomBottomNav> {
         fixedColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.turned_in, color: Colors.white,),
+            icon: Icon(
+              Icons.turned_in,
+              color: Colors.white,
+            ),
             label: 'My Groups',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.travel_explore, color: Colors.white,),
+            icon: Icon(
+              Icons.travel_explore,
+              color: Colors.white,
+            ),
             label: 'Discover',
           ),
           BottomNavigationBarItem(

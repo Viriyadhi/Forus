@@ -107,7 +107,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
         color: const Color.fromRGBO(40, 40, 45, 100),
         child: Column(
           children: [
-            const Text('Hello There!', textAlign: TextAlign.left, style: TextStyle(color: Colors.white),),
+            const Text(
+              'Hello There!',
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Colors.white),
+            ),
             SizedBox(
               height: 50,
               child: Padding(
@@ -124,11 +128,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     labelText: 'Search',
                     hintText: 'Keyword',
                     focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)
-                    ),
+                        borderSide: BorderSide(color: Colors.black)),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                 ),
               ),
@@ -139,7 +142,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children:
-                      _filtered.map((data) => cardTemplate(data)).toList(),
+                        _filtered.map((data) => cardTemplate(data)).toList(),
                   ),
                 ),
               ),
