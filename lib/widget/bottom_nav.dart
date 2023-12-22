@@ -29,29 +29,41 @@ class CustomBottomNavState extends State<CustomBottomNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ForUs'),
+      backgroundColor: const Color.fromRGBO(40, 40, 45, 100),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(5.0),
+        child: AppBar(
+          backgroundColor: const Color.fromRGBO(40, 40, 45, 100),
+        ),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color.fromRGBO(26, 21, 21, 100),
+        fixedColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.turned_in),
+            icon: Icon(
+              Icons.turned_in,
+              color: Colors.white,
+            ),
             label: 'My Groups',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.travel_explore),
+            icon: Icon(
+              Icons.travel_explore,
+              color: Colors.white,
+            ),
             label: 'Discover',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person, color: Colors.white),
             label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.greenAccent,
+        unselectedItemColor: Colors.white,
         onTap: _onItemTapped,
       ),
     );

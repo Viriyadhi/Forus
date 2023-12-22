@@ -14,16 +14,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  User? _user;
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     firebaseAuth.authStateChanges().listen((event) {
-      _user = event;
       checkCurrentUserAndNavigate();
     });
   }
@@ -36,7 +32,6 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,16 +47,13 @@ class _LoginPageState extends State<LoginPage> {
         child: SignInButton(
           Buttons.google,
           text: "Sign In",
-          onPressed: (){
+          onPressed: () {
             signInWithGoogle().then((userCredential) {
-              if (userCredential != null) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const CustomBottomNav()),
-                );
-              }
-            }).catchError((error){
-              print("Sign In Error: $error");
-            });
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (context) => const CustomBottomNav()),
+              );
+            }).catchError((error) {});
           }, // Updated onPressed handler
         ),
       ),
@@ -73,7 +65,8 @@ class _LoginPageState extends State<LoginPage> {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(

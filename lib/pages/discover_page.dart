@@ -11,39 +11,39 @@ class DiscoverPage extends StatefulWidget {
 class _DiscoverPageState extends State<DiscoverPage> {
   List<CardData> datas = [
     CardData(
-        title: 'FG/Programming',
+        title: 'Programming',
         description: 'Programming is fun, let\'s learn together',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Navy',
+        title: 'Navy',
         description: 'Find out more about the Navy',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/General',
+        title: 'General',
         description: 'You can talk about anything here',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Food',
+        title: 'Food',
         description: 'Yummy yummy in my tummy',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Programming',
+        title: 'Programming',
         description: 'Programming is fun, let\'s learn together',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Navy',
+        title: 'Navy',
         description: 'Find out more about the Navy',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Military',
+        title: 'Military',
         description: 'Find out more about the Military',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/General',
+        title: 'General',
         description: 'You can talk about anything here',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Food',
+        title: 'Food',
         description: 'Yummy yummy in my tummy',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
   ];
@@ -71,35 +71,29 @@ class _DiscoverPageState extends State<DiscoverPage> {
   }
 
   Widget cardTemplate(data) {
-    return Card(
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      child: Padding(
-        padding: const EdgeInsets.all(13),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(data.imagePath),
-                  radius: 30,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data.title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+    return SizedBox(
+      height: 200,
+      width: 150,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(13),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -108,37 +102,53 @@ class _DiscoverPageState extends State<DiscoverPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: (value) {
-                _runFiltered(value);
-              },
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                suffixIcon: Icon(Icons.clear),
-                labelText: 'Search',
-                hintText: 'Keyword',
-                border: OutlineInputBorder(
-                    // borderRadius: BorderRadius.circular(50.0)
-                    ),
-              ),
+      backgroundColor: const Color.fromRGBO(40, 40, 45, 100),
+      body: Container(
+        color: const Color.fromRGBO(40, 40, 45, 100),
+        child: Column(
+          children: [
+            const Text(
+              'Hello There!',
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Colors.white),
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: Colors.greenAccent,
-              child: SingleChildScrollView(
-                child: Column(
-                  children:
-                      _filtered.map((data) => cardTemplate(data)).toList(),
+            SizedBox(
+              height: 50,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: (value) {
+                    _runFiltered(value);
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: const Icon(Icons.clear),
+                    labelText: 'Search',
+                    hintText: 'Keyword',
+                    focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Container(
+                color: const Color.fromRGBO(40, 40, 45, 100),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children:
+                        _filtered.map((data) => cardTemplate(data)).toList(),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
