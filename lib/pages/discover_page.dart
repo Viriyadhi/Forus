@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forus/model/card_data.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key});
@@ -9,6 +10,16 @@ class DiscoverPage extends StatefulWidget {
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
+
+  Future<void> inputData(String fireGroupName, String fireDescription) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/group");
+
+    await ref.set({
+      "group_name": fireGroupName,
+      "group_desc": fireDescription
+    });
+  }
+
   List<CardData> datas = [
     CardData(
         title: 'Programming',
