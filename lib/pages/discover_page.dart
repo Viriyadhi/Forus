@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forus/model/card_data.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:forus/pages/create_group.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key});
@@ -229,7 +230,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const CreateGroup()));
+        },
         foregroundColor: Colors.white,
         backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
         child: const Icon(Icons.add),
