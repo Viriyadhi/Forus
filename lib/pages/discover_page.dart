@@ -209,6 +209,12 @@ class _DiscoverPageState extends State<DiscoverPage> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        foregroundColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
