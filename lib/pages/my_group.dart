@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(          
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
