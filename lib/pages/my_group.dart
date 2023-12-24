@@ -11,39 +11,39 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<CardData> datas = [
     CardData(
-        title: 'FG/Programming',
+        title: 'Programming',
         description: 'Programming is fun, let\'s learn together',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Navy',
+        title: 'Navy',
         description: 'Find out more about the Navy',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/General',
+        title: 'General',
         description: 'You can talk about anything here',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Food',
+        title: 'Food',
         description: 'Yummy yummy in my tummy',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Programming',
+        title: 'Programming',
         description: 'Programming is fun, let\'s learn together',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Navy',
+        title: 'Navy',
         description: 'Find out more about the Navy',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Military',
+        title: 'Military',
         description: 'Find out more about the Military',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/General',
+        title: 'General',
         description: 'You can talk about anything here',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
     CardData(
-        title: 'FG/Food',
+        title: 'Food',
         description: 'Yummy yummy in my tummy',
         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
   ];
@@ -73,12 +73,12 @@ class _HomePageState extends State<HomePage> {
   Widget cardTemplateGrid(data) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(13),
-        child: Column(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(          
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   data.title,
