@@ -10,14 +10,10 @@ class DiscoverPage extends StatefulWidget {
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
-
   Future<void> inputData(String fireGroupName, String fireDescription) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/group");
 
-    await ref.set({
-      "group_name": fireGroupName,
-      "group_desc": fireDescription
-    });
+    await ref.set({"group_name": fireGroupName, "group_desc": fireDescription});
   }
 
   List<CardData> datas = [

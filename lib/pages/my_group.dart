@@ -106,38 +106,38 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(14.0),
               child: SizedBox(
-                      height: 70,
-                      child: TextField(
-                        onChanged: (value) {
-                          _runFiltered(value);
-                        },
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          prefixIcon: const Icon(Icons.search),
-                          suffixIcon: const Icon(Icons.clear),
-                          labelText: 'Search',
-                          hintText: 'Keyword',
-                          focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
+                height: 70,
+                child: TextField(
+                  onChanged: (value) {
+                    _runFiltered(value);
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: const Icon(Icons.clear),
+                    labelText: 'Search',
+                    hintText: 'Keyword',
+                    focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-            ),
-            Expanded(
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.5/2,
-                    children:
-                          _filtered.map((data) => cardTemplateGrid(data)).toList(),
-                    ),
+                  ),
                 ),
               ),
+            ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1.5 / 2,
+                  children:
+                      _filtered.map((data) => cardTemplateGrid(data)).toList(),
+                ),
+              ),
+            ),
           ],
         ),
       ),
