@@ -70,31 +70,22 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Widget cardTemplate(data) {
+  Widget cardTemplateGrid(data) {
     return Card(
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: Padding(
         padding: const EdgeInsets.all(13),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 8),
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CircleAvatar(
-                  radius: 30,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data.title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                Text(
+                  data.title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -107,37 +98,48 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: (value) {
-                _runFiltered(value);
-              },
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search),
-                suffixIcon: Icon(Icons.clear),
-                labelText: 'Search',
-                hintText: 'Keyword',
-                border: OutlineInputBorder(
-                    // borderRadius: BorderRadius.circular(50.0)
+      backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
+      body: Container(
+        color: const Color.fromRGBO(40, 40, 45, 100),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: SizedBox(
+                      height: 70,
+                      child: TextField(
+                        onChanged: (value) {
+                          _runFiltered(value);
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: const Icon(Icons.clear),
+                          labelText: 'Search',
+                          hintText: 'Keyword',
+                          focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
                     ),
-              ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: Colors.greenAccent,
-              child: SingleChildScrollView(
-                child: Column(
-                  children:
-                      _filtered.map((data) => cardTemplate(data)).toList(),
+            Expanded(
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1.5/2,
+                    children:
+                          _filtered.map((data) => cardTemplateGrid(data)).toList(),
+                    ),
                 ),
               ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
