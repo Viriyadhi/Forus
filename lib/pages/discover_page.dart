@@ -11,10 +11,29 @@ class DiscoverPage extends StatefulWidget {
 
 class _DiscoverPageState extends State<DiscoverPage> {
   Future<void> inputData(String fireGroupName, String fireDescription) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/group");
+    DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/groups");
 
     await ref.set({"group_name": fireGroupName, "group_desc": fireDescription});
   }
+
+  // void readData(){
+  //   DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/groups");
+  //   ref.onValue.listen((DatabaseEvent event) {
+  //     final data = event.snapshot.value;
+
+  //     if (data != null) {
+  //       List<CardData> fetchedData = List<CardData>.from(data.map((key, value) => CardData(
+  //         title: value['group_name'],
+  //         description: value['group_desc'],
+  //         imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4',
+  //       )));
+
+  //       setState(() {
+  //         _filtered = fetchedData.toList();
+  //       });
+  //     }
+  //   });
+  // }
 
   List<CardData> datas = [
     CardData(
