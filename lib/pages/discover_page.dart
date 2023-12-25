@@ -28,51 +28,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
         });
 
         setState(() {
-          _filtered = fetchedData.toList();
+          _allData = fetchedData.toList();
+          _filtered = _allData;
         });
       }
     });
   }
 
-  List<CardData> datas = [
-    CardData(
-        title: 'Programming',
-        description: 'Programming is fun, let\'s learn together',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Navy',
-        description: 'Find out more about the Navy',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'General',
-        description: 'You can talk about anything here',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Food',
-        description: 'Yummy yummy in my tummy',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Programming',
-        description: 'Programming is fun, let\'s learn together',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Navy',
-        description: 'Find out more about the Navy',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Military',
-        description: 'Find out more about the Military',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'General',
-        description: 'You can talk about anything here',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Food',
-        description: 'Yummy yummy in my tummy',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-  ];
-
+  List<CardData> _allData = [];
   List<CardData> _filtered = [];
 
   @override
@@ -84,10 +47,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
   void _runFiltered(String keyword) {
     setState(() {
       if (keyword.isEmpty) {
-        _filtered = datas;
+        _filtered = _allData;
       }
       if (keyword.isNotEmpty) {
-        _filtered = datas
+        _filtered = _allData
             .where((data) =>
                 data.title.toLowerCase().contains(keyword.toLowerCase()))
             .toList();
