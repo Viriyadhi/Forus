@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:forus/model/card_data.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:forus/pages/create_group.dart';
 
 class DiscoverPage extends StatefulWidget {
