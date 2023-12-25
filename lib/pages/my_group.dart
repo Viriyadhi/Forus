@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:forus/model/card_data.dart';
 
@@ -9,50 +10,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<CardData> datas = [
-    CardData(
-        title: 'Programming',
-        description: 'Programming is fun, let\'s learn together',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Navy',
-        description: 'Find out more about the Navy',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'General',
-        description: 'You can talk about anything here',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Food',
-        description: 'Yummy yummy in my tummy',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Programming',
-        description: 'Programming is fun, let\'s learn together',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Navy',
-        description: 'Find out more about the Navy',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Military',
-        description: 'Find out more about the Military',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'General',
-        description: 'You can talk about anything here',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-    CardData(
-        title: 'Food',
-        description: 'Yummy yummy in my tummy',
-        imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4'),
-  ];
+  void readData() {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/groups");
+    ref.onValue.listen((DatabaseEvent event) {
+      final data = event.snapshot.value;
 
+      if (data is Map) {
+        List<CardData> fetchedData = [];
+
+        data.forEach((key, value) {
+          fetchedData.add(CardData(
+            title: value['group_name'],
+            description: value['group_desc'],
+            imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4',
+          ));
+        });
+
+        setState(() {
+          datas = fetchedData.toList();
+          _filtered = datas;
+        });
+      }
+    });
+  }
+
+  List<CardData> datas = [];
   List<CardData> _filtered = [];
 
   @override
   void initState() {
-    _filtered = datas.toList();
+    readData();
     super.initState();
   }
 
