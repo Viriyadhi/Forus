@@ -65,7 +65,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
   Widget cardTemplateHorizontal(data) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        print('tapped');
+      },
       child: SizedBox(
         height: 200,
         width: 150,
@@ -166,13 +168,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 22),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: _filtered
-                          .map((data) => cardTemplateHorizontal(data))
-                          .toList(),
-                    ),
+                  child: SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _filtered.length,
+                        itemBuilder: (context, index) {
+                          return cardTemplateHorizontal(_filtered[index]);
+                        }),
                   ),
                 ),
                 const Padding(
