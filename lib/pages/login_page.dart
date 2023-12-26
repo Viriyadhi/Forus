@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:forus/widget/bottom_nav.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,24 +15,30 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late StreamSubscription<User?> _authSubscription;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
+    checkAndRoute();
+  }
 
-    firebaseAuth.authStateChanges().listen((event) {
-      checkCurrentUserAndNavigate();
+  void checkAndRoute() {
+    _authSubscription = firebaseAuth.authStateChanges().listen((user) {
+      if (user != null) {
+        inputData(user.uid, user.email ?? '');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const CustomBottomNav()),
+        );
+      }
     });
   }
 
-  void checkCurrentUserAndNavigate() {
-    User? currentUser = firebaseAuth.currentUser;
-    if (currentUser != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const CustomBottomNav()),
-      );
-    }
+  Future<void> inputData(String uid, String email) async {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("private_data/ids/$uid");
+    await ref.set({"email": email});
   }
 
   @override
@@ -48,10 +57,7 @@ class _LoginPageState extends State<LoginPage> {
           text: "Sign In",
           onPressed: () {
             signInWithGoogle().then((userCredential) {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                    builder: (context) => const CustomBottomNav()),
-              );
+              checkAndRoute();
             }).catchError((error) {});
           }, // Updated onPressed handler
         ),
@@ -75,5 +81,11 @@ class _LoginPageState extends State<LoginPage> {
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  @override
+  void dispose() {
+    _authSubscription.cancel(); // Cancel the subscription
+    super.dispose();
   }
 }
