@@ -2,7 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:forus/model/card_data.dart';
 import 'package:forus/pages/create_group.dart';
-// import 'package:forus/page/list_tag.dart';
+import 'package:forus/pages/list_tag.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key});
@@ -36,10 +36,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
     });
   }
 
-  GestureDetector gestureDetector = GestureDetector(onTap: () {
-    print('tapped');
-  });
-
   List<CardData> _allData = [];
   List<CardData> _filtered = [];
 
@@ -66,7 +62,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget cardTemplateHorizontal(data) {
     return GestureDetector(
       onTap: () {
-        print('tapped');
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const TagList()));
       },
       child: SizedBox(
         height: 200,
@@ -98,27 +95,33 @@ class _DiscoverPageState extends State<DiscoverPage> {
   }
 
   Widget cardTemplateVertical(data) {
-    return SizedBox(
-      height: 80,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(13),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    data.title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const TagList()));
+      },
+      child: SizedBox(
+        height: 80,
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(13),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data.title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -188,11 +191,13 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 22),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: _filtered
-                          .map((data) => cardTemplateVertical(data))
-                          .toList(),
+                  child: SizedBox(
+                    height: 400,
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: _filtered.length,
+                      itemBuilder: (context, index) =>
+                          cardTemplateVertical(_filtered[index]),
                     ),
                   ),
                 ),
