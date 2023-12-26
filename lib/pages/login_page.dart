@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
     checkAndRoute();
   }
 
-  void checkAndRoute(){
+  void checkAndRoute() {
     _authSubscription = firebaseAuth.authStateChanges().listen((user) {
       if (user != null) {
         inputData(user.uid, user.email ?? '');
@@ -36,7 +36,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> inputData(String uid, String email) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("private_data/ids/$uid");
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("private_data/ids/$uid");
     await ref.set({"email": email});
   }
 
