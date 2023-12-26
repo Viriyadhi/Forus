@@ -8,7 +8,6 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-
   final editUsernameController = TextEditingController();
 
   @override
@@ -17,7 +16,6 @@ class _EditProfileState extends State<EditProfile> {
       appBar: AppBar(
         title: const Text("Edit Profile"),
       ),
-
       body: ListView(
         children: [
           Column(
@@ -46,8 +44,7 @@ class _EditProfileState extends State<EditProfile> {
                     style: TextButton.styleFrom(
                         fixedSize: const Size(200, 50),
                         shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(4)),
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
                             side: BorderSide(color: Colors.black))),
                     child: const Text("Save",
                         style: TextStyle(color: Colors.black)),
