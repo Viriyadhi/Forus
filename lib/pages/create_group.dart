@@ -69,10 +69,29 @@ class _CreateGroupState extends State<CreateGroup> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextButton(
                       onPressed: () {
-                        inputData(
-                            groupNameInput.text, groupDescriptionInput.text);
-                        groupNameInput.text = "";
-                        groupDescriptionInput.text = "";
+                        if(groupNameInput.text.isEmpty || groupDescriptionInput.text.isEmpty){
+                          showDialog(context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text("Input Text"),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            )
+                          );
+                        }
+                        if(groupNameInput.text.isNotEmpty && groupDescriptionInput.text.isNotEmpty){
+                          inputData(
+                              groupNameInput.text, groupDescriptionInput.text);
+                          groupNameInput.text = "";
+                          groupDescriptionInput.text = "";
+                        }
                       },
                       style: TextButton.styleFrom(
                           fixedSize: const Size(200, 50),
