@@ -2,7 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:forus/model/card_data.dart';
 import 'package:forus/pages/create_group.dart';
-import 'package:forus/pages/list_tag.dart';
+import 'package:forus/pages/in_group.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key});
@@ -63,7 +63,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const TagList()));
+            context, MaterialPageRoute(builder: (context) => const InGroup()));
       },
       child: SizedBox(
         height: 200,
@@ -98,7 +98,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const TagList()));
+            context, MaterialPageRoute(builder: (context) => const InGroup()));
       },
       child: SizedBox(
         height: 80,

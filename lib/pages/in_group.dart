@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class TagList extends StatefulWidget {
-  const TagList({super.key});
+class InGroup extends StatefulWidget {
+  const InGroup({super.key});
 
   @override
-  State<TagList> createState() => _TagListState();
+  State<InGroup> createState() => _InGroupState();
 }
 
-class _TagListState extends State<TagList> {
+class _InGroupState extends State<InGroup> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
