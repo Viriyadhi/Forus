@@ -63,7 +63,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const InGroup()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => InGroup(
+                      groupName: data.title,
+                    )));
       },
       child: SizedBox(
         height: 200,
@@ -98,7 +102,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const InGroup()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => InGroup(
+                      groupName: data.title,
+                    )));
       },
       child: SizedBox(
         height: 80,
