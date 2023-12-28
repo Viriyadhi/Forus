@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:forus/model/card_data.dart';
@@ -10,25 +13,40 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late StreamSubscription<User?> _authSubscription;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  @override
+  void dispose() {
+    _authSubscription.cancel(); // Cancel the subscription
+    super.dispose();
+  }
+
   void readData() {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/groups");
-    ref.onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.value;
+    _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
+      if (user != null) {
+        String uid = user.uid;
+        DatabaseReference ref =
+            FirebaseDatabase.instance.ref("private_data/ids/$uid/groups");
+        ref.onValue.listen((DatabaseEvent event) {
+          final data = event.snapshot.value;
 
-      if (data is Map) {
-        List<CardData> fetchedData = [];
+          if (data is Map) {
+            List<CardData> fetchedData = [];
 
-        data.forEach((key, value) {
-          fetchedData.add(CardData(
-            title: value['group_name'],
-            description: value['group_desc'],
-            imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4',
-          ));
-        });
+            data.forEach((key, value) {
+              fetchedData.add(CardData(
+                title: value['group_name'],
+                description: 'Contoh',
+                imagePath:
+                    'https://avatars.githubusercontent.com/u/81005238?v=4',
+              ));
+            });
 
-        setState(() {
-          datas = fetchedData.toList();
-          _filtered = datas;
+            setState(() {
+              datas = fetchedData.toList();
+              _filtered = datas;
+            });
+          }
         });
       }
     });

@@ -38,8 +38,11 @@ class _InGroupState extends State<InGroup> {
 
   Future<void> _inputData(String uid, String group) async {
     DatabaseReference ref =
-        FirebaseDatabase.instance.ref("private_data/ids/$uid/$group");
-    await ref.set({"group_name": group});
+        FirebaseDatabase.instance.ref("private_data/ids/$uid/groups");
+    // ref.onValue.listen((DatabaseEvent event) {
+    //   final groupData = event.snapshot.value;
+    // });
+    await ref.push().set({"group_name": group});
   }
 
   String temporaryText = "";
