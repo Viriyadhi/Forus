@@ -37,12 +37,29 @@ class _InGroupState extends State<InGroup> {
   }
 
   Future<void> _inputData(String uid, String group) async {
-    DatabaseReference ref =
+    DatabaseReference userGroupsRef =
         FirebaseDatabase.instance.ref("private_data/ids/$uid/groups");
-    // ref.onValue.listen((DatabaseEvent event) {
-    //   final groupData = event.snapshot.value;
-    // });
-    await ref.push().set({"group_name": group});
+
+    userGroupsRef
+        .orderByChild("group_name")
+        .equalTo(group)
+        .once()
+        .then((DatabaseEvent event) {
+      DataSnapshot snapshot = event.snapshot;
+
+      if (snapshot.value != null) {
+        Map<dynamic, dynamic>? data = snapshot.value as Map<dynamic, dynamic>?;
+
+        if (data != null && data.isNotEmpty) {
+          //TODO: Create Alert If Data Is Already Exist
+          print("Group '$group' already exists for this user.");
+        }
+      } else {
+        userGroupsRef.push().set({"group_name": group});
+      }
+    }).catchError((error) {
+      print("Error retrieving data: $error");
+    });
   }
 
   String temporaryText = "";
