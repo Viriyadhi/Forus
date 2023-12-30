@@ -36,6 +36,40 @@ class _InGroupState extends State<InGroup> {
     });
   }
 
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Group has been added!'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Grup has been added!'),
+                Text('Click on the button below to go to the group!'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Go to group'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _inputData(String uid, String group) async {
     DatabaseReference userGroupsRef =
         FirebaseDatabase.instance.ref("private_data/ids/$uid/groups");
@@ -50,9 +84,31 @@ class _InGroupState extends State<InGroup> {
       if (snapshot.value != null) {
         Map<dynamic, dynamic>? data = snapshot.value as Map<dynamic, dynamic>?;
 
-        if (data != null && data.isNotEmpty) {
-          //TODO: Create Alert If Data Is Already Exist
-          print("Group '$group' already exists for this user.");
+        if (data!.isNotEmpty) {
+          return showDialog<void>(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('You are already in this group!'),
+                content: const SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text('Grup already exists!'),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Close'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         }
       } else {
         userGroupsRef.push().set({"group_name": group});
@@ -74,7 +130,7 @@ class _InGroupState extends State<InGroup> {
               onPressed: () {
                 _addToMyGroup();
               },
-              child: const Text("Add To MyGroup"),
+              child: const Text('Add to The fuck'),
             ),
           ],
         ),
