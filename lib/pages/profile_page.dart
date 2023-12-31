@@ -13,33 +13,36 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    String username = "Loading...";
+    String email = "Loading...";
+
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(top: circleRadius / 2.0),
-          child: const Card(
+          child: Card(
             child: SizedBox(
               width: 300,
               height: 550,
               child: SingleChildScrollView(
                 child: Center(
                   child: Padding(
-                    padding: EdgeInsets.only(top: 120.0),
+                    padding: const EdgeInsets.only(top: 120.0),
                     child: Column(
                       children: [
-                        Text("Username goes Here"),
-                        Text("Email goes Here"),
-                        Text("Favorite tags Here"),
-                        Card(
+                        Text(username),
+                        Text(email),
+                        const Text("Favorite tags Here"),
+                        const Card(
                           color: Color.fromRGBO(20, 17, 33, 100),
                           child: SizedBox(
                             height: 100,
                             width: 200,
                           ),
                         ),
-                        Text("Stats"),
-                        Card(
+                        const Text("Stats"),
+                        const Card(
                           color: Color.fromRGBO(20, 17, 33, 100),
                           child: SizedBox(
                             height: 300,

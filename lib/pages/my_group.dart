@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
       if (user != null) {
         String uid = user.uid;
         DatabaseReference ref =
-            FirebaseDatabase.instance.ref("private_data/ids/$uid/groups");
+            FirebaseDatabase.instance.ref("private_data/group_join/user$uid");
         ref.onValue.listen((DatabaseEvent event) {
           final data = event.snapshot.value;
 
