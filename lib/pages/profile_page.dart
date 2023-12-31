@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../model/auth_helper.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -11,11 +13,25 @@ class _ProfilePageState extends State<ProfilePage> {
   final double circleRadius = 175.0;
   final double circleBorderWidth = 8.0;
 
+  String username = "Loading...";
+  String email = "Loading...";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    String? userEmail = await AuthHelper.getUserEmail();
+    setState(() {
+      email = userEmail ?? "Loading..";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    String username = "Loading...";
-    String email = "Loading...";
-
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
