@@ -36,40 +36,6 @@ class _InGroupState extends State<InGroup> {
     });
   }
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Group has been added!'),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Grup has been added!'),
-                Text('Click on the button below to go to the group!'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Go to group'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> _inputData(String uid, String group) async {
     DatabaseReference userGroupsRef =
         FirebaseDatabase.instance.ref("private_data/ids/$uid/groups");
@@ -112,9 +78,30 @@ class _InGroupState extends State<InGroup> {
         }
       } else {
         userGroupsRef.push().set({"group_name": group});
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: const SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text('Group Added'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Close'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
-    }).catchError((error) {
-      print("Error retrieving data: $error");
     });
   }
 
