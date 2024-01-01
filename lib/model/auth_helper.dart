@@ -9,6 +9,7 @@ class AuthHelper {
     User? user = auth.currentUser;
 
     if (user != null) {
+      userIdentification = user.uid;
       return user.uid;
     } else {
       return null; // Return null if the user is not logged in
@@ -47,5 +48,10 @@ class AuthHelper {
         FirebaseDatabase.instance.ref("private_data/ids/$userID/");
 
     await ref.update({"username": username});
+  }
+
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+    // Perform any additional tasks after sign out if needed
   }
 }

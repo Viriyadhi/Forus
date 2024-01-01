@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:forus/model/auth_helper.dart';
 import 'package:forus/widget/bottom_nav.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_button/sign_in_button.dart';
@@ -29,7 +28,6 @@ class _LoginPageState extends State<LoginPage> {
     _authSubscription = firebaseAuth.authStateChanges().listen((user) {
       if (user != null) {
         inputData(user.uid, user.email ?? '');
-        AuthHelper.userIdentification = user.uid;
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const CustomBottomNav()),
         );
