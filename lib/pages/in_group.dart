@@ -38,7 +38,7 @@ class _InGroupState extends State<InGroup> {
 
   Future<void> _inputData(String uid, String group) async {
     DatabaseReference userGroupsRef =
-        FirebaseDatabase.instance.ref("private_data/ids/$uid/groups");
+        FirebaseDatabase.instance.ref("private_data/group_join/user$uid");
 
     userGroupsRef
         .orderByChild("group_name")
