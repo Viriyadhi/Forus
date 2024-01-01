@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class AuthHelper {
   static Future<String?> getCurrentUserId() async {
@@ -8,8 +9,7 @@ class AuthHelper {
     if (user != null) {
       return user.uid;
     } else {
-      // If the user is not logged in, return null or handle the scenario accordingly
-      return null;
+      return null; // Return null if the user is not logged in
     }
   }
 
@@ -20,8 +20,15 @@ class AuthHelper {
     if (user != null) {
       return user.email;
     } else {
-      // If the user is not logged in, return null or handle the scenario accordingly
+      // If the user is not logged in, return null
       return null;
     }
+  }
+
+  static Future<void> sendUsername(String username, String userID) async {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("private_data/ids/$userID/");
+
+    await ref.update({"username": username});
   }
 }
