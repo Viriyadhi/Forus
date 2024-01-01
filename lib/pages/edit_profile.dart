@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forus/model/auth_helper.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -9,6 +10,21 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final editUsernameController = TextEditingController();
+  String? uid;
+
+  Future<void> _loadUserData() async {
+    String? userId = await AuthHelper.getCurrentUserId();
+    setState(() {
+      uid = userId ?? "Loading..";
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +56,11 @@ class _EditProfileState extends State<EditProfile> {
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      AuthHelper.sendUsername(
+                          editUsernameController.text.toString(),
+                          uid ?? "tempuser");
+                    },
                     style: TextButton.styleFrom(
                         fixedSize: const Size(200, 50),
                         shape: const RoundedRectangleBorder(
