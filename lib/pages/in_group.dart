@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:forus/model/card_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,30 @@ class _InGroupState extends State<InGroup> {
   late StreamSubscription<User?> _authSubscription;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  void readData() {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/groups");
+    ref.onValue.listen((DatabaseEvent event) {
+      final data = event.snapshot.value;
+
+      if (data is Map) {
+        List<CardData> fetchedData = [];
+
+        data.forEach((key, value) {
+          fetchedData.add(CardData(
+            title: value['group_name'],
+            description: value['group_desc'],
+            imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4',
+          ));
+        });
+
+        setState(() {
+          _allData = fetchedData.toList();
+          _filtered = _allData;
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +57,23 @@ class _InGroupState extends State<InGroup> {
     _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
       if (user != null) {
         _inputData(user.uid, widget.groupName);
+      }
+    });
+  }
+
+  List<CardData> _allData = [];
+  List<CardData> _filtered = [];
+
+  void _runFiltered(String keyword) {
+    setState(() {
+      if (keyword.isEmpty) {
+        _filtered = _allData;
+      }
+      if (keyword.isNotEmpty) {
+        _filtered = _allData
+            .where((data) =>
+                data.title.toLowerCase().contains(keyword.toLowerCase()))
+            .toList();
       }
     });
   }
@@ -105,22 +147,113 @@ class _InGroupState extends State<InGroup> {
     });
   }
 
-  String temporaryText = "";
+  List<String> chipData = [
+    'Flutter',
+    'Dart',
+    'Widgets',
+    'Mobile',
+  ];
 
+  Widget threadTemplate() {
+    return GestureDetector(
+      child: SizedBox(
+        height: 200,
+        width: 150,
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(13),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Thread Title Here",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Chip(
+                      label: const Text(
+                        '#Tag goes here',
+                        style: TextStyle(fontSize: 11.0),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 7.0, vertical: 1.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100.0),
+                      ),
+                      labelPadding: const EdgeInsets.all(1.0),
+                      visualDensity:
+                          const VisualDensity(horizontal: 0.0, vertical: -4.0),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String temporaryText = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            TextButton(
-              onPressed: () {
-                _addToMyGroup();
-              },
-              child: const Text('Add to The fuck'),
+      backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 24.0),
+        child: Container(
+          color: const Color.fromRGBO(40, 40, 45, 100),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: 70,
+                    child: TextField(
+                      onChanged: (value) {
+                        _runFiltered(value);
+                      },
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: const Icon(Icons.clear),
+                        labelText: 'Search',
+                        hintText: 'Keyword',
+                        focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  threadTemplate(),
+                  threadTemplate(),
+                  threadTemplate(),
+                  threadTemplate(),
+                  threadTemplate(),
+                  threadTemplate(),
+                ],
+              ),
             ),
-          ],
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print("pressssed");
+        },
+        foregroundColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
+        child: const Icon(Icons.add),
       ),
     );
   }
