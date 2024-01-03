@@ -4,6 +4,7 @@ import 'package:forus/model/card_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:forus/widget/expandable_fab.dart';
 
 class InGroup extends StatefulWidget {
   final String groupName;
@@ -147,12 +148,57 @@ class _InGroupState extends State<InGroup> {
     });
   }
 
-  List<String> chipData = [
-    'Flutter',
-    'Dart',
-    'Widgets',
-    'Mobile',
-  ];
+  Widget chatTemplate() {
+    //make an avatar border with the user's profile picture, and message box on the right
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Row(
+        children: [
+          const CircleAvatar(
+            radius: 20,
+            backgroundImage: NetworkImage(
+                'https://avatars.githubusercontent.com/u/81005238?v=4'),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "This is a messagemessagemessagemessagemessagemessagemessagemessagemessage",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget chipTemplate() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 4.0),
+      child: Chip(
+        label: const Text(
+          '#Tag goes here',
+          style: TextStyle(fontSize: 11.0),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 1.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100.0),
+        ),
+        labelPadding: const EdgeInsets.all(1.0),
+        visualDensity: const VisualDensity(horizontal: 0.0, vertical: -4.0),
+      ),
+    );
+  }
 
   Widget threadTemplate() {
     return GestureDetector(
@@ -175,20 +221,14 @@ class _InGroupState extends State<InGroup> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Chip(
-                      label: const Text(
-                        '#Tag goes here',
-                        style: TextStyle(fontSize: 11.0),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 7.0, vertical: 1.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100.0),
-                      ),
-                      labelPadding: const EdgeInsets.all(1.0),
-                      visualDensity:
-                          const VisualDensity(horizontal: 0.0, vertical: -4.0),
+                    Row(
+                      children: [
+                        chipTemplate(),
+                        chipTemplate(),
+                        chipTemplate(),
+                      ],
                     ),
+                    chatTemplate(),
                   ],
                 ),
               ],
@@ -247,13 +287,19 @@ class _InGroupState extends State<InGroup> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print("pressssed");
-        },
-        foregroundColor: Colors.white,
-        backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
-        child: const Icon(Icons.add),
+      floatingActionButton: ExpandableFab(
+        distance: 55.0,
+        children: [
+          Tooltip(
+            message: 'Add to My Group',
+            child: ActionButton(
+              onPressed: () {
+                _addToMyGroup();
+              },
+              icon: const Icon(Icons.add),
+            ),
+          ),
+        ],
       ),
     );
   }
