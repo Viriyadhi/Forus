@@ -35,10 +35,7 @@ class _InGroupState extends State<InGroup> {
           ));
         });
 
-        setState(() {
-          _allData = fetchedData.toList();
-          _filtered = _allData;
-        });
+        setState(() {});
       }
     });
   }
@@ -58,23 +55,6 @@ class _InGroupState extends State<InGroup> {
     _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
       if (user != null) {
         _inputData(user.uid, widget.groupName);
-      }
-    });
-  }
-
-  List<CardData> _allData = [];
-  List<CardData> _filtered = [];
-
-  void _runFiltered(String keyword) {
-    setState(() {
-      if (keyword.isEmpty) {
-        _filtered = _allData;
-      }
-      if (keyword.isNotEmpty) {
-        _filtered = _allData
-            .where((data) =>
-                data.title.toLowerCase().contains(keyword.toLowerCase()))
-            .toList();
       }
     });
   }
@@ -257,9 +237,7 @@ class _InGroupState extends State<InGroup> {
                   SizedBox(
                     height: 70,
                     child: TextField(
-                      onChanged: (value) {
-                        _runFiltered(value);
-                      },
+                      onChanged: (value) {},
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
