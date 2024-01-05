@@ -58,8 +58,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    readData();
     super.initState();
+    readData();
   }
 
   void _runFiltered(String keyword) {

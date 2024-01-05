@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:forus/widget/expandable_fab.dart';
+import 'package:forus/pages/group_chat.dart';
 
 class InGroup extends StatefulWidget {
   final String groupName;
@@ -16,11 +17,55 @@ class InGroup extends StatefulWidget {
 }
 
 class _InGroupState extends State<InGroup> {
+  bool isAlreadyInGroup = false;
   late StreamSubscription<User?> _authSubscription;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  Future<void> _loadData() async {
+    bool result = await checkData();
+    setState(() {
+      isAlreadyInGroup = result;
+    });
+  }
+
+  Future<bool> checkData() async {
+    bool isExist = false;
+    _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
+      if (user != null) {
+        DatabaseReference userGroupsRef = FirebaseDatabase.instance
+            .ref("private_data/group_join/user${user.uid}");
+
+        userGroupsRef
+            .orderByChild("group_name")
+            .equalTo(widget.groupName)
+            .once()
+            .then((DatabaseEvent event) {
+          DataSnapshot snapshot = event.snapshot;
+
+          if (snapshot.value != null) {
+            Map<dynamic, dynamic>? data =
+                snapshot.value as Map<dynamic, dynamic>?;
+
+            if (data!.isNotEmpty) {
+              //ada di grup
+              isExist = true;
+              print("ada di grup");
+            }
+          } else {
+            //ga ada di grup
+            isExist = false;
+            print("ga ada di grup");
+          }
+        });
+      }
+    });
+    print("value is: $isExist");
+    return isExist;
+  }
+
   void readData() {
     DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/groups");
+
     ref.onValue.listen((DatabaseEvent event) {
       final data = event.snapshot.value;
 
@@ -43,11 +88,13 @@ class _InGroupState extends State<InGroup> {
   @override
   void initState() {
     super.initState();
+    readData();
+    _loadData();
   }
 
   @override
   void dispose() {
-    _authSubscription.cancel(); // Cancel the subscription
+    _authSubscription.cancel();
     super.dispose();
   }
 
@@ -55,6 +102,27 @@ class _InGroupState extends State<InGroup> {
     _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
       if (user != null) {
         _inputData(user.uid, widget.groupName);
+      }
+    });
+  }
+
+  void _addThread() {
+    print("Add Thread");
+  }
+
+  List<CardData> _allData = [];
+  List<CardData> _filtered = [];
+
+  void _runFiltered(String keyword) {
+    setState(() {
+      if (keyword.isEmpty) {
+        _filtered = _allData;
+      }
+      if (keyword.isNotEmpty) {
+        _filtered = _allData
+            .where((data) =>
+                data.title.toLowerCase().contains(keyword.toLowerCase()))
+            .toList();
       }
     });
   }
@@ -182,6 +250,10 @@ class _InGroupState extends State<InGroup> {
 
   Widget threadTemplate() {
     return GestureDetector(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const GroupChat()));
+      },
       child: SizedBox(
         height: 200,
         width: 150,
@@ -268,15 +340,25 @@ class _InGroupState extends State<InGroup> {
       floatingActionButton: ExpandableFab(
         distance: 55.0,
         children: [
-          Tooltip(
-            message: 'Add to My Group',
-            child: ActionButton(
-              onPressed: () {
-                _addToMyGroup();
-              },
-              icon: const Icon(Icons.add),
-            ),
-          ),
+          isAlreadyInGroup
+              ? Tooltip(
+                  message: "You are already in this group!",
+                  child: ActionButton(
+                    onPressed: () {
+                      _addToMyGroup();
+                    },
+                    icon: const Icon(Icons.add),
+                  ),
+                )
+              : Tooltip(
+                  message: "Add Thread",
+                  child: ActionButton(
+                    onPressed: () {
+                      _addThread();
+                    },
+                    icon: const Icon(Icons.add),
+                  ),
+                ),
         ],
       ),
     );
