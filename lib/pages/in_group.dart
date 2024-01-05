@@ -80,16 +80,36 @@ class _InGroupState extends State<InGroup> {
           ));
         });
 
-        setState(() {});
+        setState(() {
+          _allData = fetchedData.toList();
+          _filtered = _allData;
+        });
       }
     });
   }
+
+  List<CardData> _allData = [];
+  List<CardData> _filtered = [];
 
   @override
   void initState() {
     super.initState();
     readData();
     _loadData();
+  }
+
+  void _runFiltered(String keyword) {
+    setState(() {
+      if (keyword.isEmpty) {
+        _filtered = _allData;
+      }
+      if (keyword.isNotEmpty) {
+        _filtered = _allData
+            .where((data) =>
+                data.title.toLowerCase().contains(keyword.toLowerCase()))
+            .toList();
+      }
+    });
   }
 
   @override
@@ -108,23 +128,6 @@ class _InGroupState extends State<InGroup> {
 
   void _addThread() {
     print("Add Thread");
-  }
-
-  final List<CardData> _allData = [];
-  List<CardData> _filtered = [];
-
-  void _runFiltered(String keyword) {
-    setState(() {
-      if (keyword.isEmpty) {
-        _filtered = _allData;
-      }
-      if (keyword.isNotEmpty) {
-        _filtered = _allData
-            .where((data) =>
-                data.title.toLowerCase().contains(keyword.toLowerCase()))
-            .toList();
-      }
-    });
   }
 
   Future<void> _inputData(String uid, String group) async {
@@ -296,6 +299,14 @@ class _InGroupState extends State<InGroup> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
+      appBar: AppBar(
+        title: const Text(
+          "Group Chat",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: const Color.fromRGBO(22, 23, 31, 1),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 24.0),
         child: Container(
@@ -309,7 +320,9 @@ class _InGroupState extends State<InGroup> {
                   SizedBox(
                     height: 70,
                     child: TextField(
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        _runFiltered(value);
+                      },
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
