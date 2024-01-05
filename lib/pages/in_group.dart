@@ -110,7 +110,7 @@ class _InGroupState extends State<InGroup> {
     print("Add Thread");
   }
 
-  List<CardData> _allData = [];
+  final List<CardData> _allData = [];
   List<CardData> _filtered = [];
 
   void _runFiltered(String keyword) {
