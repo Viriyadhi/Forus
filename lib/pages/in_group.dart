@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:forus/model/card_data.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:forus/model/auth_helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:forus/widget/expandable_fab.dart';
 import 'package:forus/pages/group_chat.dart';
 
 class InGroup extends StatefulWidget {
@@ -17,187 +15,127 @@ class InGroup extends StatefulWidget {
 }
 
 class _InGroupState extends State<InGroup> {
-  bool isAlreadyInGroup = false;
-  late StreamSubscription<User?> _authSubscription;
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  String groupStatus = "Loading...";
+  late bool isAlreadyInGroup;
 
-  Future<void> _loadData() async {
-    bool result = await checkData();
-    setState(() {
-      isAlreadyInGroup = result;
-    });
-  }
+  Future<void> checkData() async {
+    String? curUserId = await AuthHelper.getCurrentUserId();
+    List<String> userJoinedGroups = [];
 
-  Future<bool> checkData() async {
-    bool isExist = false;
-    _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
-      if (user != null) {
-        DatabaseReference userGroupsRef = FirebaseDatabase.instance
-            .ref("private_data/group_join/user${user.uid}");
+    DatabaseReference userGroup =
+        FirebaseDatabase.instance.ref('private_data/group_join/user$curUserId');
 
-        userGroupsRef
-            .orderByChild("group_name")
-            .equalTo(widget.groupName)
-            .once()
-            .then((DatabaseEvent event) {
-          DataSnapshot snapshot = event.snapshot;
-
-          if (snapshot.value != null) {
-            Map<dynamic, dynamic>? data =
-                snapshot.value as Map<dynamic, dynamic>?;
-
-            if (data!.isNotEmpty) {
-              //ada di grup
-              isExist = true;
-              print("ada di grup");
-            }
-          } else {
-            //ga ada di grup
-            isExist = false;
-            print("ga ada di grup");
-          }
-        });
-      }
-    });
-    print("value is: $isExist");
-    return isExist;
-  }
-
-  void readData() {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/groups");
-
-    ref.onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.value;
-
-      if (data is Map) {
-        List<CardData> fetchedData = [];
-
-        data.forEach((key, value) {
-          fetchedData.add(CardData(
-            title: value['group_name'],
-            description: value['group_desc'],
-            imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4',
-          ));
-        });
-
-        setState(() {
-          _allData = fetchedData.toList();
-          _filtered = _allData;
-        });
-      }
-    });
-  }
-
-  List<CardData> _allData = [];
-  List<CardData> _filtered = [];
-
-  @override
-  void initState() {
-    super.initState();
-    readData();
-    _loadData();
-  }
-
-  void _runFiltered(String keyword) {
-    setState(() {
-      if (keyword.isEmpty) {
-        _filtered = _allData;
-      }
-      if (keyword.isNotEmpty) {
-        _filtered = _allData
-            .where((data) =>
-                data.title.toLowerCase().contains(keyword.toLowerCase()))
-            .toList();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _authSubscription.cancel();
-    super.dispose();
-  }
-
-  void _addToMyGroup() {
-    _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
-      if (user != null) {
-        _inputData(user.uid, widget.groupName);
-      }
-    });
-  }
-
-  void _addThread() {
-    print("Add Thread");
-  }
-
-  Future<void> _inputData(String uid, String group) async {
-    DatabaseReference userGroupsRef =
-        FirebaseDatabase.instance.ref("private_data/group_join/user$uid");
-
-    userGroupsRef
-        .orderByChild("group_name")
-        .equalTo(group)
-        .once()
-        .then((DatabaseEvent event) {
+    try {
+      DatabaseEvent event = await userGroup.once();
       DataSnapshot snapshot = event.snapshot;
 
       if (snapshot.value != null) {
         Map<dynamic, dynamic>? data = snapshot.value as Map<dynamic, dynamic>?;
+        if (data != null) {
+          data.forEach((key, value) {
+            userJoinedGroups.add(value['group_name'].toString());
+            bool isNotJoined = !userJoinedGroups.contains(widget.groupName);
 
-        if (data!.isNotEmpty) {
-          return showDialog<void>(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('You are already in this group!'),
-                content: const SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Text('Grup already exists!'),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Close'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+            setState(() {
+              isAlreadyInGroup = !isNotJoined; //Printing True Or False
+              groupStatus = isNotJoined ? "Add to MyGroup" : "Add Thread";
+            });
+          });
         }
-      } else {
-        userGroupsRef.push().set({"group_name": group});
-        return showDialog<void>(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              content: const SingleChildScrollView(
-                child: ListBody(
-                  children: <Widget>[
-                    Text('Group Added'),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Close'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
       }
-    });
+    } catch (error) {
+      print('Error: $error');
+    }
   }
+
+  @override
+  void initState() {
+    super.initState();
+    checkData();
+  }
+
+  Future<void> inputData() async {
+    String? uid = await AuthHelper.getCurrentUserId();
+    DatabaseReference userGroupsRef =
+        FirebaseDatabase.instance.ref("private_data/group_join/user$uid");
+    if (!isAlreadyInGroup) {
+      userGroupsRef.push().set({"group_name": widget.groupName});
+    } else {
+      //TODO: Add AlertBox or something to announce user
+      print("Group Sudah Masuk");
+    }
+  }
+//Old Input Data:
+  //no need to use this
+  // Future<void> _inputData() async {
+  //   String? uid = await AuthHelper.getCurrentUserId();
+  //   DatabaseReference userGroupsRef =
+  //       FirebaseDatabase.instance.ref("private_data/group_join/user$uid");
+  //
+  //   userGroupsRef
+  //       .orderByChild("group_name")
+  //       .equalTo(widget.groupName)
+  //       .once()
+  //       .then((DatabaseEvent event) {
+  //     DataSnapshot snapshot = event.snapshot;
+  //
+  //     if (snapshot.value != null) {
+  //       Map<dynamic, dynamic>? data = snapshot.value as Map<dynamic, dynamic>?;
+  //
+  //       if (data!.isNotEmpty) {
+  //         return showDialog<void>(
+  //           context: context,
+  //           barrierDismissible: false,
+  //           builder: (BuildContext context) {
+  //             return AlertDialog(
+  //               title: const Text('You are already in this group!'),
+  //               content: const SingleChildScrollView(
+  //                 child: ListBody(
+  //                   children: <Widget>[
+  //                     Text('Grup already exists!'),
+  //                   ],
+  //                 ),
+  //               ),
+  //               actions: <Widget>[
+  //                 TextButton(
+  //                   child: const Text('Close'),
+  //                   onPressed: () {
+  //                     Navigator.of(context).pop();
+  //                   },
+  //                 ),
+  //               ],
+  //             );
+  //           },
+  //         );
+  //       }
+  //     } else {
+  //       userGroupsRef.push().set({"group_name": widget.groupName});
+  //       return showDialog<void>(
+  //         context: context,
+  //         barrierDismissible: false,
+  //         builder: (BuildContext context) {
+  //           return AlertDialog(
+  //             content: const SingleChildScrollView(
+  //               child: ListBody(
+  //                 children: <Widget>[
+  //                   Text('Group Added'),
+  //                 ],
+  //               ),
+  //             ),
+  //             actions: <Widget>[
+  //               TextButton(
+  //                 child: const Text('Close'),
+  //                 onPressed: () {
+  //                   Navigator.of(context).pop();
+  //                 },
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       );
+  //     }
+  //   });
+  // }
 
   Widget chatTemplate() {
     //make an avatar border with the user's profile picture, and message box on the right
@@ -298,82 +236,62 @@ class _InGroupState extends State<InGroup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
-      appBar: AppBar(
-        title: const Text(
-          "Group Chat",
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+        backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
+        appBar: AppBar(
+          title: const Text(
+            "Group Chat",
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          backgroundColor: const Color.fromRGBO(22, 23, 31, 1),
         ),
-        backgroundColor: const Color.fromRGBO(22, 23, 31, 1),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 24.0),
-        child: Container(
-          color: const Color.fromRGBO(40, 40, 45, 100),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(
-                    height: 70,
-                    child: TextField(
-                      onChanged: (value) {
-                        _runFiltered(value);
-                      },
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        prefixIcon: const Icon(Icons.search),
-                        suffixIcon: const Icon(Icons.clear),
-                        labelText: 'Search',
-                        hintText: 'Keyword',
-                        focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 24.0),
+          child: Container(
+            color: const Color.fromRGBO(40, 40, 45, 100),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      height: 70,
+                      child: TextField(
+                        onChanged: (value) {},
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: const Icon(Icons.clear),
+                          labelText: 'Search',
+                          hintText: 'Keyword',
+                          focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  threadTemplate(),
-                  threadTemplate(),
-                  threadTemplate(),
-                  threadTemplate(),
-                  threadTemplate(),
-                  threadTemplate(),
-                ],
+                    threadTemplate(),
+                    threadTemplate(),
+                    threadTemplate(),
+                    threadTemplate(),
+                    threadTemplate(),
+                    threadTemplate(),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-      floatingActionButton: ExpandableFab(
-        distance: 55.0,
-        children: [
-          isAlreadyInGroup
-              ? Tooltip(
-                  message: "You are already in this group!",
-                  child: ActionButton(
-                    onPressed: () {
-                      _addToMyGroup();
-                    },
-                    icon: const Icon(Icons.add),
-                  ),
-                )
-              : Tooltip(
-                  message: "Add Thread",
-                  child: ActionButton(
-                    onPressed: () {
-                      _addThread();
-                    },
-                    icon: const Icon(Icons.add),
-                  ),
-                ),
-        ],
-      ),
-    );
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            inputData();
+          },
+          label: Text(groupStatus),
+          icon: const Icon(Icons.add),
+        ));
   }
 }
