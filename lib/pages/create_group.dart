@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:forus/model/identification_system.dart';
 
 class CreateGroup extends StatefulWidget {
   const CreateGroup({super.key});
@@ -13,12 +14,17 @@ class _CreateGroupState extends State<CreateGroup> {
   final groupDescriptionInput = TextEditingController();
 
   Future<void> inputData(String fireGroupName, String fireDescription) async {
+    String groupId =
+        (await IdSystem.getUniqueId("public_data/groups/", "group_id"))
+            .toString();
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("public_data/groups/");
 
-    await ref
-        .push()
-        .set({"group_name": fireGroupName, "group_desc": fireDescription});
+    await ref.push().set({
+      "group_name": fireGroupName,
+      "group_desc": fireDescription,
+      "group_id": groupId
+    });
   }
 
   @override
