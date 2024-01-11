@@ -31,22 +31,25 @@ class _HomePageState extends State<HomePage> {
         ref.onValue.listen((DatabaseEvent event) {
           final data = event.snapshot.value;
 
-          if (data is Map) {
-            List<CardData> fetchedData = [];
+          if (data != null) {
+            if (data is Map) {
+              List<CardData> fetchedData = [];
 
-            data.forEach((key, value) {
-              fetchedData.add(CardData(
-                title: value['group_name'],
-                description: 'Contoh',
-                imagePath:
-                    'https://avatars.githubusercontent.com/u/81005238?v=4',
-              ));
-            });
+              data.forEach((key, value) {
+                fetchedData.add(CardData(
+                  title: value['group_name'],
+                  description: 'Contoh',
+                  id: value['group_id'],
+                  imagePath:
+                      'https://avatars.githubusercontent.com/u/81005238?v=4',
+                ));
+              });
 
-            setState(() {
-              datas = fetchedData.toList();
-              _filtered = datas;
-            });
+              setState(() {
+                datas = fetchedData.toList();
+                _filtered = datas;
+              });
+            }
           }
         });
       }
@@ -84,6 +87,7 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(
                 builder: (context) => InGroup(
                       groupName: data.title,
+                      groupId: data.id,
                     )));
       },
       child: SizedBox(
