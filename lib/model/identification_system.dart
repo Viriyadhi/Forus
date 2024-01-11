@@ -32,18 +32,4 @@ class IdSystem {
     }
     return newId;
   }
-
-  Future<void> inputData(String fireGroupName, String fireDescription) async {
-    String groupId =
-        (await IdSystem.getUniqueId("public_data/groups/", "group_id"))
-            .toString();
-    DatabaseReference ref =
-        FirebaseDatabase.instance.ref("public_data/groups/");
-
-    await ref.push().set({
-      "group_name": fireGroupName,
-      "group_desc": fireDescription,
-      "group_id": groupId
-    });
-  }
 }
