@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-class GroupChat extends StatefulWidget {
-  const GroupChat({super.key});
+class Chat extends StatefulWidget {
+  final String chatName;
+  const Chat({Key? key, required this.chatName}) : super(key: key);
+  //TODO: Parse the chatName from in_group
 
   @override
-  State<GroupChat> createState() => _GroupChatState();
+  State<Chat> createState() => _ChatState();
 }
 
 Widget chatTemplate() {
@@ -81,7 +83,7 @@ Widget myChatTemplate() {
   );
 }
 
-class _GroupChatState extends State<GroupChat> {
+class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

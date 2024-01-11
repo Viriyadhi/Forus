@@ -1,6 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
 import 'auth_helper.dart';
 
 class ChatHelper extends ChangeNotifier {

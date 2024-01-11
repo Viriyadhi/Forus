@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:forus/model/auth_helper.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:forus/pages/group_chat.dart';
+import 'package:forus/pages/chat.dart';
+import 'package:forus/pages/create_chat.dart';
 
 class InGroup extends StatefulWidget {
   final String groupName;
@@ -43,6 +44,12 @@ class _InGroupState extends State<InGroup> {
           });
         }
       }
+      if (snapshot.value == null) {
+        setState(() {
+          isAlreadyInGroup = false; //Printing True Or False
+          groupStatus = "Add to MyGroup";
+        });
+      }
     } catch (error) {
       print('Error: $error');
     }
@@ -54,15 +61,31 @@ class _InGroupState extends State<InGroup> {
     checkData();
   }
 
+  Future<void> threadOnTap() async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const Chat(
+                  chatName: "test",
+                )));
+  }
+
   Future<void> inputData() async {
-    String? uid = await AuthHelper.getCurrentUserId();
-    DatabaseReference userGroupsRef =
-        FirebaseDatabase.instance.ref("private_data/group_join/user$uid");
     if (!isAlreadyInGroup) {
+      String? uid = await AuthHelper.getCurrentUserId();
+      DatabaseReference userGroupsRef =
+          FirebaseDatabase.instance.ref("private_data/group_join/user$uid");
       userGroupsRef.push().set({"group_name": widget.groupName});
+      setState(() {
+        groupStatus = "Add Thread";
+      });
     } else {
-      //TODO: Add AlertBox or something to announce user
-      print("Group Sudah Masuk");
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CreateChat(
+                    groupName: widget.groupName,
+                  )));
     }
   }
 //Old Input Data:
@@ -192,8 +215,7 @@ class _InGroupState extends State<InGroup> {
   Widget threadTemplate() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const GroupChat()));
+        threadOnTap();
       },
       child: SizedBox(
         height: 200,
