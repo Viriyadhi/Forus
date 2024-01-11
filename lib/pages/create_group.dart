@@ -140,7 +140,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 ),
               ),
               const SizedBox(height: 20),
-              Container(
+              SizedBox(
                 width: 1200,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
