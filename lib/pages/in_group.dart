@@ -72,12 +72,38 @@ class _InGroupState extends State<InGroup> {
 
   Future<void> inputData() async {
     if (!isAlreadyInGroup) {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Group has been added!'),
+            content: const SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(
+                      'Group has been added! You can now add thread to this group.'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Close'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+
       String? uid = await AuthHelper.getCurrentUserId();
       DatabaseReference userGroupsRef =
           FirebaseDatabase.instance.ref("private_data/group_join/user$uid");
       userGroupsRef.push().set({"group_name": widget.groupName});
       setState(() {
-        groupStatus = "Add Thread";
+        groupStatus = "Add Threadssssssssssssssss";
       });
     } else {
       Navigator.push(
@@ -260,6 +286,7 @@ class _InGroupState extends State<InGroup> {
     return Scaffold(
         backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
         appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
           title: const Text(
             "Group Chat",
             style: TextStyle(
