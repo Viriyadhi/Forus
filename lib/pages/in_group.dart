@@ -8,8 +8,10 @@ import 'package:forus/pages/create_chat.dart';
 
 class InGroup extends StatefulWidget {
   final String groupName;
+  final String groupId;
 
-  const InGroup({Key? key, required this.groupName}) : super(key: key);
+  const InGroup({Key? key, required this.groupName, required this.groupId})
+      : super(key: key);
 
   @override
   State<InGroup> createState() => _InGroupState();
@@ -34,7 +36,7 @@ class _InGroupState extends State<InGroup> {
         Map<dynamic, dynamic>? data = snapshot.value as Map<dynamic, dynamic>?;
         if (data != null) {
           data.forEach((key, value) {
-            userJoinedGroups.add(value['group_name'].toString());
+            userJoinedGroups.add(value['group_id'].toString());
             bool isNotJoined = !userJoinedGroups.contains(widget.groupName);
 
             setState(() {
@@ -102,7 +104,9 @@ class _InGroupState extends State<InGroup> {
       String? uid = await AuthHelper.getCurrentUserId();
       DatabaseReference userGroupsRef =
           FirebaseDatabase.instance.ref("private_data/group_join/user$uid");
-      userGroupsRef.push().set({"group_name": widget.groupName});
+      userGroupsRef
+          .push()
+          .set({"group_name": widget.groupName, "group_id": widget.groupId});
       setState(() {
         groupStatus = "Add Threadssssssssssssssss";
       });

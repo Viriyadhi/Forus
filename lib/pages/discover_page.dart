@@ -16,22 +16,24 @@ class _DiscoverPageState extends State<DiscoverPage> {
     DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/groups");
     ref.onValue.listen((DatabaseEvent event) {
       final data = event.snapshot.value;
+      if (data != null) {
+        if (data is Map) {
+          List<CardData> fetchedData = [];
 
-      if (data is Map) {
-        List<CardData> fetchedData = [];
+          data.forEach((key, value) {
+            fetchedData.add(CardData(
+              title: value['group_name'],
+              description: value['group_desc'],
+              id: value['group_id'],
+              imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4',
+            ));
+          });
 
-        data.forEach((key, value) {
-          fetchedData.add(CardData(
-            title: value['group_name'].toString(),
-            description: value['group_desc'].toString(),
-            imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4',
-          ));
-        });
-
-        setState(() {
-          _allData = fetchedData.toList();
-          _filtered = _allData;
-        });
+          setState(() {
+            _allData = fetchedData.toList();
+            _filtered = _allData;
+          });
+        }
       }
     });
   }
@@ -67,6 +69,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             MaterialPageRoute(
                 builder: (context) => InGroup(
                       groupName: data.title,
+                      groupId: data.id,
                     )));
       },
       child: SizedBox(
@@ -106,6 +109,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             MaterialPageRoute(
                 builder: (context) => InGroup(
                       groupName: data.title,
+                      groupId: data.id,
                     )));
       },
       child: SizedBox(
