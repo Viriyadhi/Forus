@@ -22,8 +22,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
         data.forEach((key, value) {
           fetchedData.add(CardData(
-            title: value['group_name'],
-            description: value['group_desc'],
+            title: value['group_name'].toString(),
+            description: value['group_desc'].toString(),
             imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4',
           ));
         });

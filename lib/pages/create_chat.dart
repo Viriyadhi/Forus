@@ -11,6 +11,13 @@ class CreateChat extends StatefulWidget {
 class _CreateChatState extends State<CreateChat> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Create Thread"),
+      ),
+      body: const Center(
+        child: Text("Create Thread"),
+      ),
+    );
   }
 }
