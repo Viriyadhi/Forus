@@ -90,6 +90,7 @@ class _InGroupState extends State<InGroup> {
               TextButton(
                 child: const Text('Close'),
                 onPressed: () {
+                  isAlreadyInGroup = true;
                   Navigator.of(context).pop();
                 },
               ),
