@@ -11,4 +11,4 @@
 
 ## TEAM:
 Bimo: Backend (Database, implement function),
-Viri: Frontend (Styling, prep UI, implement function)
+Viri: Frontend (Styling, prep UI, implement function, Repository manager)
