@@ -34,7 +34,13 @@ class _CreateGroupState extends State<CreateGroup> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(40, 40, 45, 0.612),
       appBar: AppBar(
-        title: const Text("Create Group"),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          "Group Chat",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: const Color.fromRGBO(22, 23, 31, 1),
       ),
       body: Center(
         child: Padding(
