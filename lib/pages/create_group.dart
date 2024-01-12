@@ -1,7 +1,7 @@
-// import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-// import 'package:forus/model/identification_system.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:forus/model/identification_system.dart';
 
 class CreateGroup extends StatefulWidget {
   const CreateGroup({super.key});
@@ -10,7 +10,22 @@ class CreateGroup extends StatefulWidget {
   State<CreateGroup> createState() => _CreateGroupState();
 }
 
+Future<void> inputData(String fireGroupName, String fireDescription) async {
+  String groupId =
+      (await IdSystem.getUniqueId("public_data/groups/", "group_id"))
+          .toString();
+  DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/groups/");
+
+  await ref.push().set({
+    "group_name": fireGroupName,
+    "group_desc": fireDescription,
+    "group_id": groupId
+  });
+}
+
 class _CreateGroupState extends State<CreateGroup> {
+  final groupNameController = TextEditingController();
+  final groupDescController = TextEditingController();
   List<String> selectedValues = [];
   List<String> items = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
@@ -29,6 +44,7 @@ class _CreateGroupState extends State<CreateGroup> {
               SizedBox(
                 width: 1200,
                 child: TextField(
+                  controller: groupNameController,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(20.0),
                     border: OutlineInputBorder(
@@ -36,7 +52,7 @@ class _CreateGroupState extends State<CreateGroup> {
                     ),
                     filled: true,
                     fillColor: Colors.grey[200],
-                    hintText: "Thread Title",
+                    hintText: "Group Name",
                   ),
                 ),
               ),
@@ -128,6 +144,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 child: TextField(
                   minLines: 6,
                   maxLines: 6,
+                  controller: groupDescController,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(20.0),
                     border: OutlineInputBorder(
@@ -150,8 +167,10 @@ class _CreateGroupState extends State<CreateGroup> {
                     ),
                   ),
                   onPressed: () {
-                    // Implement the logic to create the thread
-                    // This is just a placeholder, replace it with your logic
+                    inputData(
+                        groupNameController.text, groupDescController.text);
+                    groupNameController.text = "";
+                    groupDescController.text = "";
                     print("Create Thread Button Pressed");
                   },
                   child: const Text("Create Thread",

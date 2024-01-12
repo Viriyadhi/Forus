@@ -37,7 +37,7 @@ class _InGroupState extends State<InGroup> {
         if (data != null) {
           data.forEach((key, value) {
             userJoinedGroups.add(value['group_id'].toString());
-            bool isNotJoined = !userJoinedGroups.contains(widget.groupName);
+            bool isNotJoined = !userJoinedGroups.contains(widget.groupId);
 
             setState(() {
               isAlreadyInGroup = !isNotJoined; //Printing True Or False
@@ -108,7 +108,7 @@ class _InGroupState extends State<InGroup> {
           .push()
           .set({"group_name": widget.groupName, "group_id": widget.groupId});
       setState(() {
-        groupStatus = "Add Threadssssssssssssssss";
+        groupStatus = "Add Thread";
       });
     } else {
       Navigator.push(
