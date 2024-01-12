@@ -1,16 +1,14 @@
-# forus
+# FORUS
 
-A new Flutter project.
+![image](https://github.com/Viriyadhi/Forus/assets/81005238/e43d46e9-0de2-4f81-986e-d80e907e2a08)
+![image](https://github.com/Viriyadhi/Forus/assets/81005238/fa7ada39-f2e9-47b2-bc5c-2ad3f8223e57)
+![image](https://github.com/Viriyadhi/Forus/assets/81005238/8e8b39a7-8278-4e08-be9f-6fe7cd98c9cf)
+![image](https://github.com/Viriyadhi/Forus/assets/81005238/5f7735fb-afbc-4496-9589-2c6438456fd7)
+![image](https://github.com/Viriyadhi/Forus/assets/81005238/b8659c72-6207-491a-ad47-887269e05f0d)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## TEAM:
+Bimo: Backend (Database, implement function),
+Viri: Frontend (Styling, prep UI, implement function)
