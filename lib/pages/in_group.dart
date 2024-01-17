@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:forus/pages/chat.dart';
 import 'package:forus/pages/create_chat.dart';
 
+import '../model/thread_data.dart';
+
 class InGroup extends StatefulWidget {
   final String groupName;
   final String groupId;
@@ -60,6 +62,7 @@ class _InGroupState extends State<InGroup> {
   @override
   void initState() {
     super.initState();
+    readData();
     checkData();
   }
 
@@ -116,7 +119,7 @@ class _InGroupState extends State<InGroup> {
           MaterialPageRoute(
               builder: (context) => CreateChat(
                     groupName: widget.groupName,
-                groupId: widget.groupId,
+                    groupId: widget.groupId,
                   )));
     }
   }
@@ -192,6 +195,39 @@ class _InGroupState extends State<InGroup> {
   //   });
   // }
 
+  void readData() {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("public_data/group_chats");
+    ref.onValue.listen((DatabaseEvent event) {
+      final data = event.snapshot.value;
+      if (data != null) {
+        if (data is Map) {
+          List<ThreadData> fetchedData = [];
+
+          data.forEach((key, value) {
+            fetchedData.add(ThreadData(
+                title: value['name'],
+                description: value['about'],
+                id: value['id'],
+                groupId: value['groupBelongs']));
+          });
+
+          setState(() {
+            _allData = fetchedData.toList();
+            _filtered = _allData;
+            _filtered = _allData
+                .where(
+                    (data) => data.groupId.toString().contains(widget.groupId))
+                .toList();
+          });
+        }
+      }
+    });
+  }
+
+  List<ThreadData> _allData = [];
+  List<ThreadData> _filtered = [];
+
   Widget chatTemplate() {
     //make an avatar border with the user's profile picture, and message box on the right
     return Padding(
@@ -244,33 +280,6 @@ class _InGroupState extends State<InGroup> {
     );
   }
 
-  void readData() {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("public_data/groups");
-    ref.onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.value;
-      if (data != null) {
-        if (data is Map) {
-          List<CardData> fetchedData = [];
-
-          data.forEach((key, value) {
-            fetchedData.add(CardData(
-              title: value['group_name'],
-              description: value['group_desc'],
-              id: value['group_id'],
-              imagePath: 'https://avatars.githubusercontent.com/u/81005238?v=4',
-            ));
-          });
-
-          setState(() {
-            _allData = fetchedData.toList();
-            _filtered = _allData;
-          });
-        }
-      }
-    });
-  }
-
-
   Widget threadTemplate(data) {
     return GestureDetector(
       onTap: () {
@@ -288,9 +297,9 @@ class _InGroupState extends State<InGroup> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Thread Title Here",
-                      style: TextStyle(
+                    Text(
+                      data.title,
+                      style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
@@ -356,7 +365,17 @@ class _InGroupState extends State<InGroup> {
                         ),
                       ),
                     ),
-                    threadTemplate(),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 22),
+                        child: SizedBox(
+                          height: 400,
+                          child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: _filtered.length,
+                            itemBuilder: (context, index) =>
+                                threadTemplate(_filtered[index]),
+                          ),
+                        ))
                   ],
                 ),
               ),
