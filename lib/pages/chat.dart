@@ -61,7 +61,7 @@ Widget myChatTemplate() {
             child: const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                "This is a BACOT",
+                "This is a MESSAGE",
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.white,
