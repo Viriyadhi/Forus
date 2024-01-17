@@ -1,15 +1,22 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:forus/model/get_set_helper.dart';
+import 'package:forus/model/identification_system.dart';
 
 class CreateChat extends StatefulWidget {
   final String groupName;
-  const CreateChat({Key? key, required this.groupName}) : super(key: key);
+  final String groupId;
+
+  const CreateChat({Key? key, required this.groupName, required this.groupId}) : super(key: key);
 
   @override
   State<CreateChat> createState() => _CreateChatState();
 }
 
 class _CreateChatState extends State<CreateChat> {
+  final titleController = TextEditingController();
+  final aboutController = TextEditingController();
   List<String> selectedValues = [];
   List<String> items = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
@@ -34,6 +41,7 @@ class _CreateChatState extends State<CreateChat> {
               SizedBox(
                 width: 1200,
                 child: TextField(
+                  controller: titleController,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(20.0),
                     border: OutlineInputBorder(
@@ -133,6 +141,7 @@ class _CreateChatState extends State<CreateChat> {
                 child: TextField(
                   minLines: 6,
                   maxLines: 6,
+                  controller: aboutController,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(20.0),
                     border: OutlineInputBorder(
@@ -154,10 +163,17 @@ class _CreateChatState extends State<CreateChat> {
                           BorderRadius.circular(6.0), // Set the border radius
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     // Implement the logic to create the thread
                     // This is just a placeholder, replace it with your logic
                     print("Create Thread Button Pressed");
+                    String firebasePath = 'public_data/group_chats';
+                    String threadId = (await IdSystem.getUniqueId(firebasePath, "id"))
+                        .toString();
+                    DatabaseReference userGroupsRef = FirebaseDatabase.instance.ref(firebasePath);
+                    userGroupsRef
+                        .push()
+                        .set({'name': titleController.text, 'about': aboutController.text, 'id': threadId});
                   },
                   child: const Text("Create Thread",
                       style: TextStyle(color: Color.fromRGBO(40, 40, 45, 1))),
