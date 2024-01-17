@@ -1,14 +1,14 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:forus/model/get_set_helper.dart';
 import 'package:forus/model/identification_system.dart';
 
 class CreateChat extends StatefulWidget {
   final String groupName;
   final String groupId;
 
-  const CreateChat({Key? key, required this.groupName, required this.groupId}) : super(key: key);
+  const CreateChat({Key? key, required this.groupName, required this.groupId})
+      : super(key: key);
 
   @override
   State<CreateChat> createState() => _CreateChatState();
@@ -162,12 +162,17 @@ class _CreateChatState extends State<CreateChat> {
                     // This is just a placeholder, replace it with your logic
                     print("Create Thread Button Pressed");
                     String firebasePath = 'public_data/group_chats';
-                    String threadId = (await IdSystem.getUniqueId(firebasePath, "id"))
-                        .toString();
-                    DatabaseReference userGroupsRef = FirebaseDatabase.instance.ref(firebasePath);
-                    userGroupsRef
-                        .push()
-                        .set({'name': titleController.text, 'about': aboutController.text, 'id': threadId});
+                    String threadId =
+                        (await IdSystem.getUniqueId(firebasePath, "id"))
+                            .toString();
+                    DatabaseReference userGroupsRef =
+                        FirebaseDatabase.instance.ref(firebasePath);
+                    userGroupsRef.push().set({
+                      'name': titleController.text,
+                      'about': aboutController.text,
+                      'id': threadId,
+                      'groupBelongs': widget.groupId
+                    });
                   },
                   child: const Text("Create Thread",
                       style: TextStyle(color: Color.fromRGBO(40, 40, 45, 1))),

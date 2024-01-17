@@ -1,40 +1,36 @@
 import 'package:firebase_database/firebase_database.dart';
 
-class RoFirebaseConnect{
-
-
+class RoFirebaseConnect {
   static Future<List> getDataOnce(String firebasePath, String dataName) async {
     List<String> listOfData = [];
     DatabaseReference ref = FirebaseDatabase.instance.ref(firebasePath);
-    try{
+    try {
       DatabaseEvent event = await ref.once();
       DataSnapshot snapshot = event.snapshot;
 
-      if (snapshot.value != null){
+      if (snapshot.value != null) {
         Map<dynamic, dynamic>? data = snapshot.value as Map<dynamic, dynamic>?;
-        if (data != null){
+        if (data != null) {
           data.forEach((key, value) {
             listOfData.add(value[dataName]);
           });
         }
       }
-    } catch (error){
+    } catch (error) {
       print("Error: $error");
     }
     return listOfData;
   }
 
-  static updateData(String firebasePath, String dataName, String dataValue){
-    DatabaseReference userGroupsRef = FirebaseDatabase.instance.ref(firebasePath);
-    userGroupsRef
-        .push()
-        .update({dataName: dataValue});
+  static updateData(String firebasePath, String dataName, String dataValue) {
+    DatabaseReference userGroupsRef =
+        FirebaseDatabase.instance.ref(firebasePath);
+    userGroupsRef.push().update({dataName: dataValue});
   }
 
-  static setData(String firebasePath, String dataName, String dataValue){
-    DatabaseReference userGroupsRef = FirebaseDatabase.instance.ref(firebasePath);
-    userGroupsRef
-        .push()
-        .set({dataName: dataValue});
+  static setData(String firebasePath, String dataName, String dataValue) {
+    DatabaseReference userGroupsRef =
+        FirebaseDatabase.instance.ref(firebasePath);
+    userGroupsRef.push().set({dataName: dataValue});
   }
 }
